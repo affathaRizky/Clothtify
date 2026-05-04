@@ -3,33 +3,45 @@
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('home');
+    return view('pages.home');
 });
 
-Route::get('/home', function () {
-    return view('home');
-})->name('home');
+Route::get('/test', function () {
+    return view('testView');
+});
 
-Route::get('/produk', function () {
-    return view('produk');
-})->name('produk');
+Route::get('/test2', function () {
+    return view('testView2');
+});
 
-Route::get('/login', function () {
-    return view('login');
-})->name('login');
+Route::get('/homeAdmin', function () {
+    return view('pages.admin.homeAdmin');
+});
 
-Route::get('/lupaPassword', function () {
-    return view('lupaPassword');
-})->name('lupaPassword');
+Route::get('/productManagement', function () {
+    return view('pages.admin.productManagement');
+});
 
-Route::get('/register', function () {
-    return view('register');
-})->name('register');
+Route::get('/orderManagement', function () {
+    return view('pages.admin.orderManagement');
+});
 
-Route::get('/tentang', function () {
-    return view('tentang');
-})->name('tentang');
+Route::prefix('pages')->group(function () {
+    Route::view('/', 'pages.home')->name('home');
+    Route::view('/produk', 'pages.product')->name('product');
+    Route::view('/gallery', 'pages.gallery')->name('gallery');
+    Route::view('/aboutUs', 'pages.aboutUs')->name('aboutUs');
+    Route::view('/login', 'pages.login')->name('login');
+    Route::view('/register', 'pages.register')->name('register');
+    Route::view('/forgotPassword', 'pages.forgotPassword')->name('forgotPassword');
+    Route::view('/productDetail', 'pages.productDetail')->name('productDetail');
+    Route::view('/checkout', 'pages.checkoutPage')->name('checkout');
+});
 
-Route::get('/galeri', function () {
-    return view('galeri');
-})->name('galeri');
+Route::prefix('pages.admin')->group(function () {
+    Route::view('/homeAdmin', 'pages.admin.homeAdmin')->name('homeAdmin');
+    Route::view('/productManagement', 'pages.admin.productManagement')->name('productManagement');
+    Route::view('/orderManagement', 'pages.admin.orderManagement')->name('orderManagement');
+    Route::view('/categoryManagement', 'pages.admin.categoryManagement')->name('categoryManagement');
+    // Route::view('/aboutUs', 'pages.aboutUs')->name('aboutUs');
+});
