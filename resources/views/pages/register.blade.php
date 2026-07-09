@@ -4,21 +4,29 @@
 
 @section('content')
 
-    @section('left-side')
-    <div class="hidden md:flex md:w-1/2 bg-gray-100 relative overflow-hidden m">
+@section('left-side')
+<div class="hidden md:flex md:w-1/2 bg-gray-100 relative overflow-hidden m">
 
-        <img src="{{ asset('images/BG_HOME_PBL.jpg') }}" alt="Background Image"
-            class="absolute inset-0 w-full h-full object-cover object-center">
-    </div>
+    <img src="{{ asset('images/BG_HOME_PBL.jpg') }}" alt="Background Image"
+        class="absolute inset-0 w-full h-full object-cover object-center">
+</div>
 
-    @endsection
+@endsection
 
+
+@section('right-side')
+
+<!-- RIGHT SIDE: FORM -->
+<div class="w-full md:w-1/2 flex items-center justify-center p-6 sm:p-8 overflow-y-auto">
 
     @section('right-side')
 
     <!-- RIGHT SIDE: FORM -->
     <div class="w-full md:w-1/2 flex items-center justify-center p-6 sm:p-8 overflow-y-auto">
+
         <div class="w-full max-w-md">
+
+            @include('components.alert2')
 
             <div class="text-center">
                 <!-- Logo -->
@@ -30,7 +38,7 @@
             </div>
 
             <!-- Form -->
-            <form method="POST" action="{{ route('login') }}" class="space-y-5">
+            <form method="POST" action="{{ route('process.register') }}" class="space-y-5">
                 @csrf
 
                 <!-- Email -->
@@ -97,4 +105,4 @@
         </div>
     </div>
     @endsection
-@endsection
+    @endsection
