@@ -29,7 +29,6 @@
 
 <div class="w-full md:w-1/2 flex items-center justify-center p-8">
     <div class="w-full max-w-md">
-
         <div class="text-center">
             <!-- Logo -->
             @include('components.logo', ['size' => 'text-4xl'])
@@ -38,6 +37,14 @@
                 <p class="text-gray-500 mt-2 text-sm">Welcome Back!</p>
             </div>
         </div>
+
+        @if(session('success'))
+        <x-alert type="success">{{ session('success') }}</x-alert>
+        @endif
+
+        @if(session('error'))
+        <x-alert type="error">{{ session('error') }}</x-alert>
+        @endif
 
         <!-- Form -->
         <form method="POST" action="{{ route('login') }}">
