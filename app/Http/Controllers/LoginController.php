@@ -3,62 +3,44 @@
 namespace App\Http\Controllers;
 
 use App\Models\Pembeli;
+use App\Models\Admin;
 use Illuminate\Http\Request;
-use App\Models\admin;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class LoginController extends Controller
 {
-    public function showLogin()
-    {
-        return view('pages.login');
-    }
-
     public function processLogin(Request $request)
     {
-        $request->validate([
-            'username' => 'required',
-            'password' => 'required',
-        ], [
-            'username.required' => 'Username wajib diisi!',
-            'password.required' => 'Password wajib diisi!',
-        ]);
-
-        $admin = Admin::where('username', $request->username)
-            ->where('password', $request->password)
-            ->first();
-
-        $pembeli = Pembeli::where('username', $request->username)
-            ->where('password', $request->password)
-            ->first();
-        
-        $user = $admin ?? $pembeli;
-
-        if ($user->role === 'admin') {
+        // Admin Auth
+        $admin = Admin::where('username', $request->username)->first();
+        if ($admin && Hash::check($request->password, $admin->password)) {
             session([
-                'id_admin'   => $user->id_admin,
-                'username'  => $user->username,
-                'email'     => $user->email,    
-                'role'      => $user->role
+                'admin_id'       => $admin->id_admin,
+                'admin_username' => $admin->username,
+                'admin_role'     => $admin->role,
             ]);
 
-            return redirect()->route('homeAdmin')->with('success', 'Login berhasil!');
-        } else {
-            session([
-                'id_pembeli' => $user->id_pembeli,
-                'username'   => $user->username,
-                'email'      => $user->email,    
-                'role'      => $user->role
-            ]);
-            return redirect()->route('home')->with('success', 'Login berhasil!');
-            
+            return redirect()->route('admin.home')
+                ->with('success', 'Selamat datang, ' . $admin->username . '!');
         }
-        return back()->with('error', 'Username atau Password salah!');
+
+        // Pembeli Auth
+        $pembeli = Pembeli::where('username', $request->username)->first();
+        if ($pembeli && Hash::check($request->password, $pembeli->password)) {
+            Auth::login($pembeli);
+            return redirect()->route('home')->with('success', 'Login Success!');
+        }
+
+        return back()->with('error', 'Username Or Password Is Incorrect!');
     }
 
     public function logout()
     {
+        Auth::logout();
+        Auth::guard('admin')->logout();
         session()->flush();
 
-        return redirect()->route('login')->with('success', 'Berhasil logout!');
+        return redirect()->route('login')->with('success', 'Logout Success!');
     }
 }
