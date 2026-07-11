@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <meta charset="UTF-8">
@@ -11,14 +12,16 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
+
 <body>
 
     <div class="flex h-screen w-full">
         @yield('left-side')
-
+        
         @yield('right-side')
 
     </div>
 
 </body>
+
 </html>

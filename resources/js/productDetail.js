@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function () {
     aktifkanTombol('.size-btn');
 
     // Quantity Selector 
-    var qIn = document.getElementById('qty-input');
+    var qIn = document.getElementById('jumlah_produk');
     var qMin = document.getElementById('qty-minus');
     var qPlus = document.getElementById('qty-plus');
 

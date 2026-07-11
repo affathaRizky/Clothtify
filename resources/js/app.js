@@ -4,3 +4,6 @@ import 'flowbite';
 import './sidebarCart.js';
 import './resendOtpCountdown.js';
 import './productDetail.js';
+import './sizeSelect.js'; 
+import './checkout.js';
+import './orderManage.js';  
