@@ -12,7 +12,7 @@
             <div class="hidden md:flex items-center space-x-8">
 
                 <!-- HOME -->
-                <a href="{{ route('homeAdmin') }}"
+                <a href="{{ route('admin.home') }}"
                     class="text-gray-900 font-semibold hover:text-gray-600 transition px-3 py-2">
                     HOME
                 </a>
@@ -37,7 +37,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="{{ route('orderManagement') }}"
+                                <a href="{{ route('admin.orders') }}"
                                     class="block px-4 py-2 hover:bg-gray-100 text-gray-700">
                                     <i class="fa-solid fa-layer-group mr-2"></i>ORDERS
                                 </a>
