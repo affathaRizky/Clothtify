@@ -34,51 +34,25 @@
                     <tr>
                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Category ID</th>
                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Name</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
                         <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 uppercase tracking-wider">Action</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-
-                    <!-- Category 1 -->
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="px-6 py-4"><span class="text-sm font-medium text-gray-900">001</span></td>
-                        <td class="px-6 py-4"><span class="text-sm font-medium text-gray-900">T_SHIRT</span></td>
-                        <td class="px-6 py-4"><span class="px-3 py-1.5 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Active</span></td>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-2">
-                                <button class="w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200 transition"><i class="fa-solid fa-pen-to-square text-gray-600 text-sm"></i></button>
-                                <button class="w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-red-100 transition"><i class="fa-solid fa-trash text-gray-600 hover:text-red-600 text-sm"></i></button>
-                            </div>
+                    @foreach($kategori as $item)
+                    <tr>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"> CAT - {{ $item->id_kategori }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $item->nama_kategori }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <form action="{{ route('deleteKategori', $item->id_kategori) }}" method="POST" class="inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="text-red-600 hover:text-red-800 transition">
+                                    <i class="fa-solid fa-trash"></i> Delete
+                                </button>
+                            </form>
                         </td>
                     </tr>
-
-                    <!-- Category 2 -->
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="px-6 py-4"><span class="text-sm font-medium text-gray-900">002</span></td>
-                        <td class="px-6 py-4"><span class="text-sm font-medium text-gray-900">PANTS</span></td>
-                        <td class="px-6 py-4"><span class="px-3 py-1.5 text-xs font-semibold text-gray-700 bg-gray-200 rounded-full">Nonactive</span></td>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-2">
-                                <button class="w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200 transition"><i class="fa-solid fa-pen-to-square text-gray-600 text-sm"></i></button>
-                                <button class="w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-red-100 transition"><i class="fa-solid fa-trash text-gray-600 hover:text-red-600 text-sm"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- Category 3 -->
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="px-6 py-4"><span class="text-sm font-medium text-gray-900">003</span></td>
-                        <td class="px-6 py-4"><span class="text-sm font-medium text-gray-900">HOODIE</span></td>
-                        <td class="px-6 py-4"><span class="px-3 py-1.5 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Active</span></td>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-2">
-                                <button class="w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200 transition"><i class="fa-solid fa-pen-to-square text-gray-600 text-sm"></i></button>
-                                <button class="w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-red-100 transition"><i class="fa-solid fa-trash text-gray-600 hover:text-red-600 text-sm"></i></button>
-                            </div>
-                        </td>
-                    </tr>
-
+                    @endforeach
                 </tbody>
             </table>
         </div>
@@ -92,27 +66,31 @@
     </div>
 </main>
 
-<!-- MODAL ADD CATEGORY -->
-@include('components.modal', ['modalToggle' => 'addCategoryModal', 'modalHeader' => 'ADD CATEGORY'
-, 'modalBody' =>
-' <div>
-    <label for="category_name" class="block mb-2 text-sm font-medium text-gray-700">Name</label>
-    <input type="text" id="category_name" name="category_name"
-        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5"
-        placeholder="Category Name" required>
-</div>',
-'modalFooter' =>
-'<div class="flex items-center justify-end gap-3 p-5 border-t border-gray-200 rounded-b-xl bg-gray-50">
-    <button data-modal-hide="addCategoryModal"
-        type="button"
-        class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-4 focus:outline-none focus:ring-gray-200">
-        Cancel
-    </button>
-    <button onclick="saveCategory()"
-        type="button"
-        class="px-5 py-2.5 text-sm font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300">
-        Add
-    </button>
-</div>'])
+@include('components.modal', ['modalToggle' => 'addCategoryModal', 'modalHeader' => 'ADD CATEGORY',
+'modalBody' => '<form id="addCategoryForm" class="space-y-4" action="' . route('addKategori') . '" method="POST">
+
+    <!-- Category Name -->
+    <div>
+        <label for="category_name" class="block mb-2 text-sm font-medium text-gray-700">Category Name</label>
+        <input type="text" id="nama_kategori" name="nama_kategori"
+            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5"
+            placeholder="Category Name" required>
+    </div>
+
+    ', 'modalFooter' => '
+    <div class="flex items-center justify-end gap-3 p-5 border-t border-gray-200 rounded-b-xl bg-gray-50">
+        <button data-modal-hide="addCategoryModal"
+            type="button"
+            class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-4 focus:outline-none focus:ring-gray-200 transition">
+            Cancel
+        </button>
+        <button
+            type="submit"
+            class="px-5 py-2.5 text-sm font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 transition">
+            Save Category
+        </button>
+    </div>
+</form>'
+])]
 
 @endsection
