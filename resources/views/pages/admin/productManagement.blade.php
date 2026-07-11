@@ -13,15 +13,12 @@
         <div class="flex items-center justify-between p-6 border-b border-gray-200">
             <h2 class="text-lg font-semibold text-gray-900">INVENTORY MANAGEMENT</h2>
             <div class="flex items-center gap-3">
-                <!-- Filter Button -->
                 <button class="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200 transition">
                     <i class="fa-solid fa-filter text-gray-600"></i>
                 </button>
-                <!-- Add Product Button -->
-                <button class="px-4 py-2.5 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800 transition
-                 flex items-center gap-2" data-modal-target="addProductModal" data-modal-toggle="addProductModal">
-                    <i class=" fa-solid fa-plus"></i>
-                    ADD PRODUCT
+                <button class="px-4 py-2.5 bg-gray-900 text-white font-medium rounded-lg hover:bg-gray-800 transition flex items-center gap-2"
+                    data-modal-target="addProductModal" data-modal-toggle="addProductModal">
+                    <i class="fa-solid fa-plus"></i> ADD PRODUCT
                 </button>
             </div>
         </div>
@@ -40,85 +37,71 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-
-                    <!-- Product 1 -->
+                    @if(isset($produk) && count($produk) > 0)
+                    @foreach($produk as $item)
                     <tr class="hover:bg-gray-50 transition">
+                        <!-- Product -->
                         <td class="px-6 py-4">
-                            <div class="flex items-center gap-4">
-                                <div class="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
-                                    <i class="fa-solid fa-image text-gray-400 text-2xl"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-semibold text-gray-900">PRODUCT 1</p>
-                                    <p class="text-xs text-gray-500 mt-0.5">BRG - 01</p>
+                            <div class="flex items-center gap-3">
+
+                                {{-- Info Produk --}}
+                                <div class="min-w-0">
+                                    <p class="text-sm font-semibold text-gray-900 truncate">{{ $item->nama_produk }}</p>
+                                    <p class="text-xs text-gray-500 mt-0.5">BRG - {{ $item->id_produk }}</p>
                                 </div>
                             </div>
                         </td>
+                        <!-- Category -->
                         <td class="px-6 py-4">
-                            <span class="text-sm font-medium text-gray-900">T_SHIRT</span>
+                            <span class="text-sm font-medium text-gray-900">{{ $item->kategori->nama_kategori ?? '-' }}</span>
                         </td>
+                        <!-- Price -->
                         <td class="px-6 py-4">
-                            <span class="text-sm font-medium text-gray-900">Rp. 50,000</span>
+                            <span class="text-sm font-medium text-gray-900">Rp {{ number_format($item->harga_produk, 0, ',', '.') }}</span>
                         </td>
-                        <td class="px-9 py-4">
-                            <span class="text-sm font-medium text-gray-900">10</span>
-                        </td>
+                        <!-- Stock -->
                         <td class="px-6 py-4">
-                            <span class="px-3 py-1.5 text-xs font-semibold text-green-700 bg-green-100 rounded-full">
-                                Active
+                            <span class="text-sm font-medium text-gray-900">
+                                {{ ($item->stok_s ?? 0) + ($item->stok_m ?? 0) + ($item->stok_l ?? 0) + ($item->stok_xl ?? 0) }}
                             </span>
                         </td>
+                        <!-- Status -->
+                        <td class="px-6 py-4">
+                            @if($item->status_produk === 'active')
+                            <span class="px-3 py-1.5 text-xs font-semibold text-green-700 bg-green-100 rounded-full">Active</span>
+                            @else
+                            <span class="px-3 py-1.5 text-xs font-semibold text-red-700 bg-red-100 rounded-full">Nonactive</span>
+                            @endif
+                        </td>
+                        <!-- Action -->
                         <td class="px-6 py-4">
                             <div class="flex items-center gap-2">
-                                <button class="w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200 transition">
+                                <button type="button"
+                                    data-modal-target="editProductModal{{ $item->id_produk }}"
+                                    data-modal-toggle="editProductModal{{ $item->id_produk }}"
+                                    class="w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200 transition cursor-pointer">
                                     <i class="fa-solid fa-pen-to-square text-gray-600 text-sm"></i>
                                 </button>
-                                <button class="w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-red-100 transition">
-                                    <i class="fa-solid fa-trash text-gray-600 hover:text-red-600 text-sm"></i>
-                                </button>
+
+                                <form action="{{ route('deleteProduk', $item->id_produk) }}" method="POST" class="inline">
+                                    @csrf
+                                    @method('delete')
+                                    <button class="w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-red-100 transition">
+                                        <i class="fa-solid fa-trash text-gray-600 hover:text-red-600 text-sm"></i>
+                                    </button>
+                                </form>
                             </div>
                         </td>
                     </tr>
-
-                    <!-- Product 2 -->
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-4">
-                                <div class="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center flex-shrink-0">
-                                    <i class="fa-solid fa-image text-gray-400 text-2xl"></i>
-                                </div>
-                                <div>
-                                    <p class="text-sm font-semibold text-gray-900">PRODUCT 2</p>
-                                    <p class="text-xs text-gray-500 mt-0.5">BRG - 02</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-6 py-4">
-                            <span class="text-sm font-medium text-gray-900">PANTS</span>
-                        </td>
-                        <td class="px-6 py-4">
-                            <span class="text-sm font-medium text-gray-900">Rp. 50,000</span>
-                        </td>
-                        <td class="px-9 py-4">
-                            <span class="text-sm font-medium text-gray-900">10</span>
-                        </td>
-                        <td class="px-6 py-4">
-                            <span class="px-3 py-1.5 text-xs font-semibold text-gray-700 bg-gray-200 rounded-full">
-                                Nonactive
-                            </span>
-                        </td>
-                        <td class="px-6 py-4">
-                            <div class="flex items-center gap-2">
-                                <button class="w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-gray-200 transition">
-                                    <i class="fa-solid fa-pen-to-square text-gray-600 text-sm"></i>
-                                </button>
-                                <button class="w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center hover:bg-red-100 transition">
-                                    <i class="fa-solid fa-trash text-gray-600 hover:text-red-600 text-sm"></i>
-                                </button>
-                            </div>
+                    @endforeach
+                    @else
+                    <tr>
+                        <td colspan="6" class="px-6 py-12 text-center text-gray-400 text-sm">
+                            <i class="fa-solid fa-box-open text-4xl mb-3 text-gray-300"></i>
+                            <p>Belum ada produk. Klik tombol ADD PRODUCT untuk menambah.</p>
                         </td>
                     </tr>
-
+                    @endif
                 </tbody>
             </table>
         </div>
@@ -128,9 +111,7 @@
             <button class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-700 transition">
                 <i class="fa-solid fa-chevron-left text-sm"></i>
             </button>
-            <button class="w-8 h-8 flex items-center justify-center bg-gray-900 text-white font-medium rounded transition">
-                1
-            </button>
+            <button class="w-8 h-8 flex items-center justify-center bg-gray-900 text-white font-medium rounded transition">1</button>
             <button class="w-8 h-8 flex items-center justify-center text-gray-400 hover:text-gray-700 transition">
                 <i class="fa-solid fa-chevron-right text-sm"></i>
             </button>
@@ -139,72 +120,153 @@
 
 </div>
 
-@include('components.modal', ['modalToggle' => 'addProductModal', 'modalHeader' => 'ADD PRODUCT',
-'modalBody' => '<form id="addProductForm" class="space-y-4">
+<!-- MODAL ADD PRODUCT -->
+<x-modal id="addProductModal" title="ADD PRODUCT">
+    <form class="space-y-4" method="POST" action="{{ route('addProduk') }}" enctype="multipart/form-data">
+        @csrf
 
-    <!-- Product Name -->
-    <div>
-        <label for="product_name" class="block mb-2 text-sm font-medium text-gray-700">Product Name</label>
-        <input type="text" id="product_name" name="product_name"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5"
-            placeholder="Product Name" required>
-    </div>
-
-    <!-- Price -->
-    <div>
-        <label for="price" class="block mb-2 text-sm font-medium text-gray-700">Price</label>
-        <div class="relative">
-            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                <span class="text-gray-500 text-sm">Rp.</span>
-            </div>
-            <input type="number" id="price" name="price"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full pl-12 p-2.5"
-                placeholder="0000" min="0" required>
+        <div>
+            <label class="block mb-1.5 text-sm font-medium text-gray-700">Product Name</label>
+            <input type="text" name="nama_produk" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" required>
         </div>
-    </div>
 
-    <!-- Product Type (Dropdown) -->
-    <div>
-        <label for="product_type" class="block mb-2 text-sm font-medium text-gray-700">Product Type</label>
-        <select id="product_type" name="product_type"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5" required>
-            <option value="" selected disabled>Select Product Type</option>
-            <option value="T_SHIRT">T_SHIRT</option>
-            <option value="PANTS">PANTS</option>
-            <option value="HOODIE">HOODIE</option>
-        </select>
-    </div>
+        <div class="flex gap-4">
+            <div class="w-1/2">
+                <label class="block mb-1.5 text-sm font-medium text-gray-700">Price</label>
+                <input type="number" name="harga_produk" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" min="0" required>
+            </div>
+            <div class="w-1/2">
+                <label class="block mb-1.5 text-sm font-medium text-gray-700">Category</label>
+                <select name="id_kategori" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" required>
+                    <option value="" selected disabled>Select Category</option>
+                    @foreach($kategori as $kat)
+                    <option value="{{ $kat->id_kategori }}">{{ $kat->nama_kategori }}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
 
-    <!-- Stock -->
-    <div>
-        <label for="stock" class="block mb-2 text-sm font-medium text-gray-700">Stock</label>
-        <input type="number" id="stock" name="stock"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5"
-            placeholder="0" min="0" required>
-    </div>
+        <div>
+            <label class="block mb-1.5 text-sm font-medium text-gray-700">Stock per Size</label>
+            <div class="space-y-2">
+                @foreach(['S', 'M', 'L', 'XL'] as $size)
+                <div class="flex items-center gap-3">
+                    <span class="w-12 text-sm font-bold text-gray-700 text-center bg-gray-100 py-2 rounded-md border">{{ $size }}</span>
+                    <input type="number" name="stok[{{ $size }}]" min="0" value="0" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+                </div>
+                @endforeach
+            </div>
+        </div>
 
-    <!-- Status -->
-    <div>
-        <label for="product_status" class="block mb-2 text-sm font-medium text-gray-700">Product Status</label>
-        <select id="product_status" name="product_status"
-            class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gray-500 focus:border-gray-500 block w-full p-2.5">
-            <option value="active">Active</option>
-            <option value="nonactive">Nonactive</option>
-        </select>
-    </div>
+        <div class="flex gap-4">
+            <div class="w-1/2">
+                <label class="block mb-1.5 text-sm font-medium text-gray-700">Image</label>
+                <input type="file" name="gambar" accept="image/*" class="block w-full text-xs border border-gray-300 rounded-lg cursor-pointer bg-gray-50 p-2" required>
+            </div>
+            <div class="w-1/2">
+                <label class="block mb-1.5 text-sm font-medium text-gray-700">Status</label>
+                <select name="status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+                    <option value="active">Active</option>
+                    <option value="nonactive">Nonactive</option>
+                </select>
+            </div>
+        </div>
 
-</form>', 'modalFooter' => '
-<div class="flex items-center justify-end gap-3 p-5 border-t border-gray-200 rounded-b-xl bg-gray-50">
-    <button data-modal-hide="addProductModal"
-        type="button"
-        class="px-5 py-2.5 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 focus:ring-4 focus:outline-none focus:ring-gray-200 transition">
-        Cancel
-    </button>
-    <button onclick="saveProduct()"
-        type="button"
-        class="px-5 py-2.5 text-sm font-medium text-white bg-gray-900 rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-gray-300 transition">
-        Save Product
-    </button>
-</div>'])
+        <div>
+            <label class="block mb-1.5 text-sm font-medium text-gray-700">Description</label>
+            <textarea name="deskripsi" rows="3" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" required></textarea>
+        </div>
+
+        <button type="submit" onclick="this.disabled=true; this.innerText='Menyimpan...'; this.form.submit();"
+            class="w-full text-white bg-gray-900 hover:bg-gray-800 font-medium rounded-lg text-sm px-5 py-2.5">
+            Save Product
+        </button>
+    </form>
+</x-modal>
+
+
+{{-- Modal Edit - DI DALAM foreach --}}
+@foreach($produk as $p)
+<x-modal id="editProductModal{{ $p->id_produk }}" title="EDIT PRODUCT">
+    <form class="space-y-4" method="POST" action="{{ route('updateProduk', $p->id_produk) }}" enctype="multipart/form-data">
+        @csrf
+
+        <div>
+            <label class="block mb-1.5 text-sm font-medium text-gray-700">Product Name</label>
+            <input type="text" name="edit_nama_produk" value="{{ old('nama_produk', $p->nama_produk) }}"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" required>
+        </div>
+
+        <div class="flex gap-4">
+            <div class="w-1/2">
+                <label class="block mb-1.5 text-sm font-medium text-gray-700">Price</label>
+                <input type="number" name="edit_harga_produk" value="{{ old('harga_produk', $p->harga_produk) }}"
+                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" min="0" required>
+            </div>
+            <div class="w-1/2">
+                <label class="block mb-1.5 text-sm font-medium text-gray-700">Category</label>
+                <select name="id_kategori" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" required>
+                    <option value="" disabled>Select Category</option>
+                    @foreach($kategori as $kat)
+                    <option value="{{ $kat->id_kategori }}" {{ $p->id_kategori == $kat->id_kategori ? 'selected' : '' }}>
+                        {{ $kat->nama_kategori }}
+                    </option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+
+        <div>
+            <label class="block mb-1.5 text-sm font-medium text-gray-700">Stock per Size</label>
+            <div class="space-y-2">
+                @foreach(['S', 'M', 'L', 'XL'] as $size)
+                <div class="flex items-center gap-3">
+                    <span class="w-12 text-sm font-bold text-gray-700 text-center bg-gray-100 py-2 rounded-md border">{{ $size }}</span>
+                    @php
+                    $kolomStok = 'stok_' . strtolower($size);
+                    $stokValue = old("stok.$size", $p->$kolomStok ?? 0);
+                    @endphp
+                    <input type="number" name="edit_stok[{{ $size }}]" min="0" value="{{ $stokValue }}"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+                </div>
+                @endforeach
+            </div>
+        </div>
+
+        <div class="flex gap-4">
+            <div class="w-1/2">
+                <label class="block mb-1.5 text-sm font-medium text-gray-700">Image</label>
+                @if($p->foto_produk)
+                <div class="mb-2">
+                    <img src="{{ asset('storage/' . $p->foto_produk) }}" alt="Preview" class="h-16 w-16 object-cover rounded border">
+                    <p class="text-xs text-gray-500 mt-1">Current Image</p>
+                </div>
+                @endif
+                <input type="file" name="edit_gambar_produk" accept="image/*"
+                    class="block w-full text-xs border border-gray-300 rounded-lg cursor-pointer bg-gray-50 p-2">
+                <p class="text-xs text-gray-400 mt-1">Leave empty to keep current image</p>
+            </div>
+            <div class="w-1/2">
+                <label class="block mb-1.5 text-sm font-medium text-gray-700">Status</label>
+                <select name="edit_status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5">
+                    <option value="active" {{ $p->status == 'active' ? 'selected' : '' }}>Active</option>
+                    <option value="nonactive" {{ $p->status == 'nonactive' ? 'selected' : '' }}>Nonactive</option>
+                </select>
+            </div>
+        </div>
+
+        <div>
+            <label class="block mb-1.5 text-sm font-medium text-gray-700">Description</label>
+            <textarea name="edit_deskripsi" rows="3"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" required>{{ old('deskripsi', $p->deskripsi) }}</textarea>
+        </div>
+
+        <button type="submit" onclick="this.disabled=true; this.innerText='Menyimpan...'; this.form.submit();"
+            class="w-full text-white bg-blue-600 hover:bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5">
+            Update Product
+        </button>
+    </form>
+</x-modal>
+@endforeach
 
 @endsection
