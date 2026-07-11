@@ -1,4 +1,4 @@
-<a href="{{ route('productDetail') }}" class="group block">
+<a href="{{ route('productdetail', ['id' => $id]) }}" class="group block">
     <div class="bg-white border border-gray-200 rounded-xl overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-105 hover:-translate-y-1">
         <div class="aspect-[3/4] overflow-hidden bg-gray-100">
             <img src="{{ $image }}"
